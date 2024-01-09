@@ -6,7 +6,17 @@ mongoose
   .then(() => console.log("MongoDB Connected"))
   .catch(err => console.error("MongoDB Connection Error: " + err));
 
-  
+  const userSchema = mongoose.Schema({
+    email :{
+        type : String,
+        required : true
+    },
+    password :{
+        type : String,
+        required : true
+    }
+  })
+
  const newsSchema = mongoose.Schema({
     heading : {
         type : String,
@@ -23,6 +33,6 @@ mongoose
  })
 
 const newsModel = mongoose.model("News",newsSchema);
-
-module.exports = {newsModel}
+const userModel = mongoose.model("User",userSchema)
+module.exports = {newsModel,userModel}
 
