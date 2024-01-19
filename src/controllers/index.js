@@ -1,4 +1,5 @@
 const {newsModel}= require("../db/models");
+const { getAllNews,addNewNews } = require("../service/news.services");
 
 async function fetchAll(req,res)
 {
@@ -11,49 +12,68 @@ async function fetchAll(req,res)
 
 }
 
-async function addNews(req,res)
+async function create(req,res)
 {
-    const {heading , author, newsContent } = req.body;  
-    try {
-        const newNews = new newsModel({
-            heading,
-            author,
-            newsContent
-        })
-        newNews.save();
-        res.status(201).json({newNews});
-    } catch (error) {
-        const msg = error.message
-        res.status(500).json({
-            msg
-        })
-}}
+    try{
 
-async function deleteNews(req,res)
-{
-    const newsId = req.params.newsId;
-    try {
-        const deletedNews = await newsModel.findOneAndDelete({_id : newsId});
-        
-        if (!deletedNews) {
-            return res.status(404).json({
-                msg: "News not found"
-            });
-        }
-        
-        res.status(200).json({
-            msg :"Deleted Succesfully"
-        })
-    } catch (error) {
-        const msg = error.message
-        res.status(500).json({
-            msg
-        })
+        const requestBody = req?.body || {}
+        const news = await addNewNews(requestBody);
+        res.status(201).json({newNews});
+
+    } catch{
+        res.status(501).json(error);
     }
 }
+// {
+//     const {heading , author, newsContent } = req.body;  
+//     try {
+//         const newNews = new newsModel({
+//             heading,
+//             author,
+//             newsContent
+//         })
+//         newNews.save();
+//         res.status(201).json({newNews});
+//     } catch (error) {
+//         const msg = error.message
+//         res.status(500).json({
+//             msg
+//         })
+// }}
+
+async function Delete(req,res)
+{
+    try{
+        const news = await deleteNews();
+        res.status(200).json({ msg :"Deleted Succesfully"})
+    }catch{
+        res.status(500).json({error})
+    }
+}
+// {
+//     const newsId = req.params.newsId;
+//     try {
+//         const deletedNews = await newsModel.findOneAndDelete({_id : newsId});
+        
+//         if (!deletedNews) {
+//             return res.status(404).json({
+//                 msg: "News not found"
+//             });
+//         }
+        
+//         res.status(200).json({
+//             msg :"Deleted Succesfully"
+//         })
+//     } catch (error) {
+//         const msg = error.message
+//         res.status(500).json({
+//             msg
+//         })
+//     }
+// }
 
 
-async function updateNews(req, res) {
+async function update(req, res) {
     const newsId = req.params.newsId;
     const { heading, author, newsContent } = req.body;
 
@@ -108,4 +128,4 @@ async function updateNews(req, res) {
     }
 }
 
-module.exports = {addNews,fetchAll,updateNews,deleteNews}
+module.exports = {fetchAll,create,update,Delete}

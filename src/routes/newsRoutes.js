@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
-const {fetchAll,addNews,deleteNews,updateNews} = require("../controllers/index")
+const {fetchAll,create,Delete,update} = require("../controllers/index")
 
 router.get("/",fetchAll);
-router.post("/post",addNews);
-router.delete("/delete/:newsId",deleteNews);
-router.patch("/update/:newsId",updateNews);
+router.post("/post",create);
+router.delete("/delete/:newsId",Delete);
+router.patch("/update/:newsId",update);
 
 module.exports = router;
 
