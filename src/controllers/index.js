@@ -1,15 +1,12 @@
 const {newsModel}= require("../db/models");
 
-async function getAllNews(req,res)
+async function fetchAll(req,res)
 {
     try {
-        const news = await newsModel.find({});
+        const news = await getAllNews();
         res.status(200).json({news});
     } catch (error) {
-        const msg = error.message
-        res.status(500).json({
-            msg
-        })
+        res.status(500).json(error);
     }
 
 }
@@ -55,40 +52,6 @@ async function deleteNews(req,res)
     }
 }
 
-// async function updateNews(req, res) {
-//     const newsId = req.params.newsId;
-//     const { heading, author, newsContent } = req.body;
-
-//     try {
-//         const updatedNews = await newsModel.findByIdAndUpdate(
-//             newsId,
-//             {
-//                 $set: {
-//                     heading,
-//                     author,
-//                     newsContent
-//                 }
-//             },
-//             { new: true }
-//         );
-
-//         if (!updatedNews) {
-//             return res.status(404).json({
-//                 msg: "News not found"
-//             });
-//         }
-
-//         res.status(200).json({
-//             updatedNews,
-//             msg: "Updated Successfully"
-//         });
-//     } catch (error) {
-//         const msg = error.message;
-//         res.status(500).json({
-//             msg
-//         });
-//     }
-// }
 
 async function updateNews(req, res) {
     const newsId = req.params.newsId;
@@ -145,4 +108,4 @@ async function updateNews(req, res) {
     }
 }
 
-module.exports = {addNews,getAllNews,updateNews,deleteNews}
+module.exports = {addNews,fetchAll,updateNews,deleteNews}
