@@ -1,6 +1,6 @@
 import { response } from 'express';
 
-const {getActiveNews,addNews} = require('../repositorie/news.repo.js');
+const {getActiveNews,addNews,deleteNewsById} = require('../repositorie/news.repo.js');
 
 export async function getAllNews(){
     try{
@@ -25,6 +25,7 @@ export async function addNewNews(requestData){
         const newsResponse = await addNews();
 
         if (newsResponse.is_success == true) {
+            response.statuscode = 1;
             response.message = 'New News Added';
         }
         return Promise.resolve(response);
@@ -33,3 +34,36 @@ export async function addNewNews(requestData){
         return Promise.reject(error)
     }
 }
+
+export async function deleteNews(requestData){
+    try{
+        const newsId = req.params.newsId;
+        const newsResponse = await deleteNewsById
+        if(newsResponse.is_success == true){
+            response.body.statusCode = 1;
+            response.body.message = 'Success'
+            response.body.data = {
+                newsId: newsId,
+                message: " News deleted successfully."
+            }
+            response.status(200).send(response.body);
+        }
+            else{
+                response.body.message = 'Not Found'
+                response.status(200).send(response.body);
+            }
+    } catch(error){
+        return Promise.reject(error)
+    }
+
+}
+
+export async function updateNews(requestData){
+    try{
+
+    } catch(error){
+        return Promise.reject(error)
+    }
+
+}
+

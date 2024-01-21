@@ -17,16 +17,27 @@ export async function getActiveNews() {
     }
 }
 
-export async function addNews() {
+export async function addNews(heading, author, newsContent) {
     try {
         const newNews = new newsModel({
             heading,
             author,
             newsContent
-        })
-        newNews.save();
-        if(newNews.length>0){
+        });
+        const savedNews = await newNews.save();
+        if(!isEmpty(newsModel)){
             response.is_success = true;
+            const insertResult = await news.insertMany(newsArticles)
+            const uploadedArticles = [];
+            insertResult.forEach((insertResult) => {
+                uploadedArticles.push({
+                    newsId: insertResult._id,
+                    heading: insertResult.heading,
+                    createdBy: insertResult.created_by,
+                    createdAt: insertResult.created_at,
+                })
+            });
+
         }
         return Promise.resolve(response)
     } catch (err){
@@ -34,5 +45,16 @@ export async function addNews() {
     }
 }
 
+export async function deleteNewsById() {
+    try {
+        
+        if (!isEmpty(newsId)) {
+            const deleteNews = await news.findByIdAndDelete(newsId);
+        }
+        return Promise.resolve(response)
+    } catch (err) {
+        return Promise.reject(err);
+    }
+}
 
 
