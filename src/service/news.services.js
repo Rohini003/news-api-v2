@@ -35,7 +35,7 @@ export async function addNewNews(requestData){
     }
 }
 
-export async function deleteNews(requestData){
+export async function deleteNews(req,response,next){
     try{
         const newsId = req.params.newsId;
         const newsResponse = await deleteNewsById
@@ -52,13 +52,14 @@ export async function deleteNews(requestData){
                 response.body.message = 'Not Found'
                 response.status(200).send(response.body);
             }
+            return next();
     } catch(error){
         return Promise.reject(error)
     }
 
 }
 
-export async function updateNews(requestData){
+export async function updateNews(req,res,next){
     try{
 
     } catch(error){
