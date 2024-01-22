@@ -1,8 +1,6 @@
-import { response } from "express";
-
 const newsModel = require("../db/models.js")
 
-export async function getActiveNews() {
+async function getActiveNews() {
     try {
         const response = { is_success: false, record: [] };
         const queryResponse = await newsModel.find({}).lean();
@@ -17,7 +15,7 @@ export async function getActiveNews() {
     }
 }
 
-export async function addNews(heading, author, newsContent) {
+async function addNews(heading, author, newsContent) {
     try {
         const newNews = new newsModel({
             heading,
@@ -45,7 +43,7 @@ export async function addNews(heading, author, newsContent) {
     }
 }
 
-export async function deleteNewsById() {
+ async function deleteNewsById() {
     try {
         
         if (!isEmpty(newsId)) {
@@ -57,4 +55,5 @@ export async function deleteNewsById() {
     }
 }
 
+module.exports = {getActiveNews,addNews,deleteNewsById}
 

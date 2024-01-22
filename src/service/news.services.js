@@ -1,8 +1,6 @@
-import { response } from 'express';
-
 const {getActiveNews,addNews,deleteNewsById} = require('../repositorie/news.repo.js');
 
-export async function getAllNews(){
+ async function getAllNews(){
     try{
         const response = {message:"No News Found", total_news:0, news:[]}
         const newsResponse = await getActiveNews();
@@ -19,7 +17,7 @@ export async function getAllNews(){
     }
 }
 
-export async function addNewNews(requestData){
+ async function addNewNews(requestData){
     try{
         const response = {heading , author, newsContent } = requestData;
         const newsResponse = await addNews();
@@ -35,7 +33,7 @@ export async function addNewNews(requestData){
     }
 }
 
-export async function deleteNews(req,response,next){
+ async function deleteNews(req,response,next){
     try{
         const newsId = req.params.newsId;
         const newsResponse = await deleteNewsById
@@ -59,7 +57,7 @@ export async function deleteNews(req,response,next){
 
 }
 
-export async function updateNews(req,res,next){
+ async function updateNews(req,res,next){
     try{
 
     } catch(error){
@@ -68,3 +66,4 @@ export async function updateNews(req,res,next){
 
 }
 
+module.exports = {getAllNews,addNewNews,deleteNews,updateNews}
