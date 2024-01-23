@@ -1,13 +1,12 @@
-const newsModel = require("../db/models.js")
+const { newsModel } = require('../db/models')
 
 async function getActiveNews() {
     try {
-        const response = { is_success: false, record: [] };
+        const response = { is_success: false, records: [] };
         const queryResponse = await newsModel.find({}).lean();
-
         if (queryResponse.length > 0) {
             response.is_success = true;
-            response.record = queryResponse;
+            response.records = queryResponse;
         }
         return Promise.resolve(response)
     } catch (err) {
@@ -15,17 +14,15 @@ async function getActiveNews() {
     }
 }
 
-async function addNews(heading, author, newsContent) {
+async function addNews(requestData) {
     try {
-        const newNews = new newsModel({
-            heading,
-            author,
-            newsContent
-        });
-        const savedNews = await newNews.save();
-        if(!isEmpty(newsModel)){
+       
+        const savedNews = await newsModel.create(requestData);
+        const response = {is_success:true}
+        console.log(savedNews)
+        /*if(!isEmpty(savedNews)){
             response.is_success = true;
-            const insertResult = await news.insertMany(newsArticles)
+            const insertResult = await News.insertMany(newsArticles)
             const uploadedArticles = [];
             insertResult.forEach((insertResult) => {
                 uploadedArticles.push({
@@ -36,24 +33,37 @@ async function addNews(heading, author, newsContent) {
                 })
             });
 
-        }
+        }*/
         return Promise.resolve(response)
     } catch (err){
-        return Promise.reject = {err};
+        return Promise.reject(err);
     }
 }
 
- async function deleteNewsById() {
+ async function deleteNewsById(newsId) {
     try {
-        
-        if (!isEmpty(newsId)) {
-            const deleteNews = await news.findByIdAndDelete(newsId);
-        }
-        return Promise.resolve(response)
+        const deleteNews = await newsModel.findByIdAndDelete(newsId);
+        const response = {is_success:true}
+        return Promise.resolve(response);
     } catch (err) {
         return Promise.reject(err);
     }
 }
 
-module.exports = {getActiveNews,addNews,deleteNewsById}
+async function updateNewsById() {
+    try {
+        const updatedNews = await newsModel.findByIdAndUpdate(
+            newsId,
+            {
+                $set: updateFields
+            },
+            { new: true }
+        );
+        return (updatedNews)
+    } catch (err) {
+        return Promise.reject(err);
+    }
+}
+
+module.exports = {getActiveNews,addNews,deleteNewsById,updateNewsById}
 

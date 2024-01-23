@@ -1,14 +1,16 @@
-const {getActiveNews,addNews,deleteNewsById} = require('../repositorie/news.repo.js');
+const {getActiveNews,addNews,deleteNewsById,updateNewsById} = require('../repositorie/news.repo.js')
 
  async function getAllNews(){
     try{
         const response = {message:"No News Found", total_news:0, news:[]}
         const newsResponse = await getActiveNews();
 
+        console.log(newsResponse    )
+
         if(newsResponse.is_success == true){
             response.message = 'News Found';
-            response.total_news = newsResponse.records.length
-            response.news = newsResponse.records
+            response.total_news = newsResponse?.records?.length
+            response.news = newsResponse?.records
         }
         return Promise.resolve(response);
 
@@ -19,8 +21,8 @@ const {getActiveNews,addNews,deleteNewsById} = require('../repositorie/news.repo
 
  async function addNewNews(requestData){
     try{
-        const response = {heading , author, newsContent } = requestData;
-        const newsResponse = await addNews();
+        const response = requestData;
+        const newsResponse = await addNews(requestData);
 
         if (newsResponse.is_success == true) {
             response.statuscode = 1;
@@ -33,24 +35,24 @@ const {getActiveNews,addNews,deleteNewsById} = require('../repositorie/news.repo
     }
 }
 
- async function deleteNews(req,response,next){
+ async function deleteNews(req, response){
     try{
-        const newsId = req.params.newsId;
-        const newsResponse = await deleteNewsById
+        const newsId = req?.params?.newsId;
+        const newsResponse = await deleteNewsById(newsId)
         if(newsResponse.is_success == true){
-            response.body.statusCode = 1;
-            response.body.message = 'Success'
-            response.body.data = {
+            response.statusCode = 1;
+            response.message = 'Success'
+            response.data = {
                 newsId: newsId,
                 message: " News deleted successfully."
             }
-            response.status(200).send(response.body);
+            response.status(200).send(response);
         }
-            else{
-                response.body.message = 'Not Found'
-                response.status(200).send(response.body);
+        else{
+            response.message = 'Not Found'
+            response.status(200).send(response);
             }
-            return next();
+            return Promise.resolve(response);
     } catch(error){
         return Promise.reject(error)
     }
@@ -59,6 +61,21 @@ const {getActiveNews,addNews,deleteNewsById} = require('../repositorie/news.repo
 
  async function updateNews(req,res,next){
     try{
+        const newsId = req.params.newsId;
+        const { heading, author, newsContent } = req.body;
+        const newsResponse = await updateNewsById
+        const updateFields = {};
+        if (heading) {
+            updateFields.heading = heading;
+        }
+    
+        if (author) {
+            updateFields.author = author;
+        }
+    
+        if (newsContent) {
+            updateFields.newsContent = newsContent;
+        }
 
     } catch(error){
         return Promise.reject(error)
