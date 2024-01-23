@@ -17,9 +17,10 @@ async function getActiveNews() {
 async function addNews(requestData) {
     try {
        
-        const savedNews = await newsModel.create(requestData);
+        const queryResponse = await newsModel.create(requestData);
+        //** Difference between create() save() insertOne() */
         const response = {is_success:true}
-        console.log(savedNews)
+        console.log(queryResponse)
         /*if(!isEmpty(savedNews)){
             response.is_success = true;
             const insertResult = await News.insertMany(newsArticles)
@@ -40,10 +41,12 @@ async function addNews(requestData) {
     }
 }
 
- async function deleteNewsById(newsId) {
+ async function deleteNewsById(req,response) {
     try {
-        const deleteNews = await newsModel.findByIdAndDelete(newsId);
+        const newsId = req.params.newsId;
+        const queryResponse = await newsModel.findByIdAndDelete({_id : newsId});
         const response = {is_success:true}
+        console.log(queryResponse)
         return Promise.resolve(response);
     } catch (err) {
         return Promise.reject(err);
@@ -57,7 +60,7 @@ async function updateNewsById() {
             {
                 $set: updateFields
             },
-            { new: true }
+            { new: true } //Learn this flag
         );
         return (updatedNews)
     } catch (err) {
