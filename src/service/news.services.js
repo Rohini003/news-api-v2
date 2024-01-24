@@ -38,80 +38,40 @@ async function addNewNews(requestData) {
 
 
 async function deleteNews(newsId) {
-  try {
-    const deletedNews = await deleteNewsById(newsId);
-    if (!deletedNews) {
-      throw { status: 404, msg: "News not found" };
-    }
-
-    return { status: 200, msg: "Deleted Successfully" };
-  } catch (error) {
-    throw error;
-  }
-}
-
-
-
-// async function deleteNews(req, res) {
-//     const newsId = req?.params?.newsId;
-//     try {
-
-//         const deletedNews = await newsModel.findOneAndDelete({_id : newsId});
-//         if (!deletedNews) {
-//                        return res.status(404).json({
-//                            msg: "News not found"
-//                          });
-//                  }
-                    
-//                      res.status(200).json({
-//                          msg :"Deleted Succesfully"
-//                     })
-
-//         // if (newsResponse?.is_success == true) {
-//         //     res.statusCode = 1;
-//         //     res.message = 'Success'
-//         //     res.data = {
-//         //         newsId: newsId,
-//         //         message: " News deleted successfully."
-//         //     }
-
-//         //     res.status(200).send(response);
-
-//         // } else {
-//         //     res.message = 'Not Found'
-//         //     res.status(200).send(response);
-//         // }
-//         return Promise.resolve(response);
-        
-//     } catch (error) {
-//         return Promise.reject(error)
-//     }
-
-// }
-
-async function updateNews(req, res, next) {
-    // const newsId = req.params.newsId;
     try {
-     
-        const { heading, author, newsContent } = req.body;
-        const newsResponse = await updateNewsById
-        const updateFields = {};
-        if (heading) {
-            updateFields.heading = heading;
+        const deletedNews = await deleteNewsById(newsId);
+
+        if (!deletedNews) {
+            throw { status: 404, msg: "News not found" };
         }
 
-        if (author) {
-            updateFields.author = author;
-        }
-
-        if (newsContent) {
-            updateFields.newsContent = newsContent;
-        }
-
+        return { status: 200, msg: "Deleted Successfully" };
+        
     } catch (error) {
-        return Promise.reject(error)
+        throw error;
     }
-
 }
 
-module.exports = { getAllNews, addNewNews, updateNews,deleteNews }
+
+async function updateNews(newsId, updateFields) {
+    try {
+        // Check if there are any fields to update
+        if (Object.keys(updateFields).length === 0) {
+            throw new Error("No fields to update");
+        }
+
+        // Use $set to update only the specified fields
+        const updatedNews = await updateNewsById(newsId, updateFields);
+
+        if (!updatedNews) {
+            throw new Error("News not found");
+        }
+
+        return { updatedNews, msg: "Updated Successfully" };
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
+
+
+module.exports = { getAllNews, addNewNews, updateNews, deleteNews }

@@ -54,21 +54,35 @@ async function deleteNewsById(newsId) {
     }
   }
 
-
-async function updateNewsById() {
+  async function updateNewsById(newsId, updateFields) {
     try {
         const updatedNews = await newsModel.findByIdAndUpdate(
             newsId,
-            {
-                $set: updateFields
-            },
-            { new: true } //Learn this flag
+            { $set: updateFields },
+            { new: true }
         );
-        return (updatedNews)
-    } catch (err) {
-        return Promise.reject(err);
+
+        return updatedNews;
+    } catch (error) {
+        throw new Error(error.message);
     }
 }
+
+
+// async function updateNewsById() {
+//     try {
+//         const updatedNews = await newsModel.findByIdAndUpdate(
+//             newsId,
+//             {
+//                 $set: updateFields
+//             },
+//             { new: true } //Learn this flag
+//         );
+//         return (updatedNews)
+//     } catch (err) {
+//         return Promise.reject(err);
+//     }
+// }
 
 module.exports = {getActiveNews,addNews,deleteNewsById,updateNewsById}
 

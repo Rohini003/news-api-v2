@@ -1,16 +1,17 @@
 const {newsModel}= require("../db/models");
-const { getAllNews,addNewNews,newsService,updateNews,deleteNews } = require("../service/news.services");
+const { getAllNews,addNewNews,updateNews,deleteNews } = require("../service/news.services");
 
 async function fetchAll(req,res)
 {
     try {
         const news = await getAllNews();
+
         res.status(200).json({news});
+        
     } catch (error) {
         console.log("error",error)
         res.status(500).json(error);
     }
-
 }
 
 async function create(req,res)
@@ -81,28 +82,35 @@ async function Delete(req, res) {
 //     }
 // }
 
-async function update(req,res)
-{
-    try{
-        const news = await updateNews();
-        if (Object.keys(updateFields).length === 0) {
-            return res.status(400).json({
-                msg: "No fields to update"
-            });
-        }
-        if (!updatedNews) {
-            return res.status(404).json({
-                msg: "News not found"
-            });
-        }
+async function update(req, res) {
+    const newsId = req.params.newsId;
+    const { heading, author, newsContent } = req.body;
 
+    // Create an object to store the fields to be updated
+    const updateFields = {};
 
-        res.status(200).json({ msg :"Updated Successfully"})
-    }catch(error){
-        console.log("error",error)
-        res.status(500).json(error)
+    // Check which fields are provided in the request body and add them to the updateFields object
+    if (heading) {
+        updateFields.heading = heading;
+    }
+
+    if (author) {
+        updateFields.author = author;
+    }
+
+    if (newsContent) {
+        updateFields.newsContent = newsContent;
+    }
+
+    try {
+        const result = await updateNews(newsId, updateFields);
+        res.status(200).json(result);
+    } catch (error) {
+        const msg = error.message;
+        res.status(500).json({ msg });
     }
 }
+
     // const newsId = req.params.newsId;
     // const { heading, author, newsContent } = req.body;
 
