@@ -36,7 +36,6 @@ async function addNewNews(requestData) {
     }
 }
 
-
 async function deleteNews(newsId) {
     try {
         const deletedNews = await deleteNewsById(newsId);
@@ -46,7 +45,7 @@ async function deleteNews(newsId) {
         }
 
         return { status: 200, msg: "Deleted Successfully" };
-        
+
     } catch (error) {
         throw error;
     }
@@ -68,6 +67,7 @@ async function updateNews(newsId, updateFields) {
         }
 
         return { updatedNews, msg: "Updated Successfully" };
+
     } catch (error) {
         throw new Error(error.message);
     }
