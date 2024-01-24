@@ -18,9 +18,15 @@ async function addNews(requestData) {
     try {
        
         const queryResponse = await newsModel.create(requestData);
-        //** Difference between create() save() insertOne() */
+        
         const response = {is_success:true}
         console.log(queryResponse)
+        return Promise.resolve(response)
+    } catch (err){
+        return Promise.reject(err);
+    }
+}
+
         /*if(!isEmpty(savedNews)){
             response.is_success = true;
             const insertResult = await News.insertMany(newsArticles)
@@ -34,24 +40,20 @@ async function addNews(requestData) {
                 })
             });
 
-        }*/
-        return Promise.resolve(response)
-    } catch (err){
-        return Promise.reject(err);
-    }
-}
+        }*///** Difference between create() save() insertOne() */
+        //save() method used to either insert a new document or update an existing document based on the presence of an _id field//
+        //create() create method is used to insert a new document into mongodb collection//
+        //insertone() is used to insert a single document into collection//
 
- async function deleteNewsById(req,response) {
+
+async function deleteNewsById(newsId) {
     try {
-        const newsId = req.params.newsId;
-        const queryResponse = await newsModel.findByIdAndDelete({_id : newsId});
-        const response = {is_success:true}
-        console.log(queryResponse)
-        return Promise.resolve(response);
-    } catch (err) {
-        return Promise.reject(err);
+      return await newsModel.findOneAndDelete({ _id: newsId });
+    } catch (error) {
+      throw error;
     }
-}
+  }
+
 
 async function updateNewsById() {
     try {

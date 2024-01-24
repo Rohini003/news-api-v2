@@ -1,4 +1,5 @@
 const { getActiveNews, addNews, deleteNewsById, updateNewsById } = require('../repositorie/news.repo.js')
+const { newsModel } = require('../db/models')
 
 async function getAllNews() {
     try {
@@ -35,38 +36,63 @@ async function addNewNews(requestData) {
     }
 }
 
-async function deleteNews(req, response) {
-    try {
 
-        const newsId = req?.params?.newsId;
-        const newsResponse = await deleteNewsById(newsId)
-
-        if (newsResponse.is_success == true) {
-
-            response.statusCode = 1;
-            response.message = 'Success'
-            response.data = {
-                newsId: newsId,
-                message: " News deleted successfully."
-            }
-
-            response.status(200).send(response);
-
-        } else {
-            response.message = 'Not Found'
-            response.status(200).send(response);
-        }
-        return Promise.resolve(response);
-        
-    } catch (error) {
-        return Promise.reject(error)
+async function deleteNews(newsId) {
+  try {
+    const deletedNews = await deleteNewsById(newsId);
+    if (!deletedNews) {
+      throw { status: 404, msg: "News not found" };
     }
 
+    return { status: 200, msg: "Deleted Successfully" };
+  } catch (error) {
+    throw error;
+  }
 }
 
+
+
+// async function deleteNews(req, res) {
+//     const newsId = req?.params?.newsId;
+//     try {
+
+//         const deletedNews = await newsModel.findOneAndDelete({_id : newsId});
+//         if (!deletedNews) {
+//                        return res.status(404).json({
+//                            msg: "News not found"
+//                          });
+//                  }
+                    
+//                      res.status(200).json({
+//                          msg :"Deleted Succesfully"
+//                     })
+
+//         // if (newsResponse?.is_success == true) {
+//         //     res.statusCode = 1;
+//         //     res.message = 'Success'
+//         //     res.data = {
+//         //         newsId: newsId,
+//         //         message: " News deleted successfully."
+//         //     }
+
+//         //     res.status(200).send(response);
+
+//         // } else {
+//         //     res.message = 'Not Found'
+//         //     res.status(200).send(response);
+//         // }
+//         return Promise.resolve(response);
+        
+//     } catch (error) {
+//         return Promise.reject(error)
+//     }
+
+// }
+
 async function updateNews(req, res, next) {
+    // const newsId = req.params.newsId;
     try {
-        const newsId = req.params.newsId;
+     
         const { heading, author, newsContent } = req.body;
         const newsResponse = await updateNewsById
         const updateFields = {};
@@ -88,4 +114,4 @@ async function updateNews(req, res, next) {
 
 }
 
-module.exports = { getAllNews, addNewNews, deleteNews, updateNews }
+module.exports = { getAllNews, addNewNews, updateNews,deleteNews }

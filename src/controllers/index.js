@@ -1,5 +1,5 @@
 const {newsModel}= require("../db/models");
-const { getAllNews,addNewNews,deleteNews,updateNews } = require("../service/news.services");
+const { getAllNews,addNewNews,newsService,updateNews,deleteNews } = require("../service/news.services");
 
 async function fetchAll(req,res)
 {
@@ -43,18 +43,22 @@ async function create(req,res)
 //         })
 // }}
 
-async function Delete(req,res)
-{
-    try{
-        
-        //const newsId = req.params.newsId;
-        const news = await deleteNews();
-        res.status(200).json({ msg :"Deleted Succesfully"})
-    }catch(error){
-        console.log("error",error)
-        res.status(500).json(error);
-    }
+
+
+async function Delete(req, res) {
+  const newsId = req?.params?.newsId;
+
+  try {
+    const result = await deleteNews(newsId);
+    res.status(result.status).json({ msg: result.msg });
+  } catch (error) {
+    console.log(error,error)
+    res.status(error.status || 500).json({ msg: error.msg || "Internal Server Error" });
+  }
 }
+
+
+
 // {
 //     const newsId = req.params.newsId;
 //     try {
@@ -95,6 +99,7 @@ async function update(req,res)
 
         res.status(200).json({ msg :"Updated Successfully"})
     }catch(error){
+        console.log("error",error)
         res.status(500).json(error)
     }
 }
