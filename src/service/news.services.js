@@ -58,8 +58,6 @@ async function updateNews(newsId, updateFields) {
         if (Object.keys(updateFields).length === 0) {
             throw new Error("No fields to update");
         }
-
-        // Use $set to update only the specified fields
         const updatedNews = await updateNewsById(newsId, updateFields);
 
         if (!updatedNews) {

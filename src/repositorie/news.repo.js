@@ -40,7 +40,7 @@ async function deleteNewsById(newsId) {
     try {
       return await newsModel.findOneAndDelete({ _id: newsId });
     } catch (error) {
-      throw error;
+      throw error; 
     }
   }
 
