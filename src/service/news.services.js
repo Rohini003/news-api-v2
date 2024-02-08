@@ -1,5 +1,5 @@
 const { getActiveNews, addNews, deleteNewsById, updateNewsById } = require('../repositorie/news.repo.js')
-const { newsModel } = require('../db/models')
+const { newsModel } = require('../models/news.models.js')
 
 async function getAllNews() {
     try {

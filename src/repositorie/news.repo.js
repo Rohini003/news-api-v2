@@ -1,4 +1,4 @@
-const { newsModel } = require('../db/models')
+const { newsModel } = require('../models/news.models')
 
 async function getActiveNews() {
     try {

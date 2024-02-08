@@ -1,4 +1,4 @@
-const { newsModel } = require("../db/models");
+const { newsModel } = require("../models/news.models");
 const { getAllNews, addNewNews, updateNews, deleteNews } = require("../service/news.services");
 
 async function fetchAll(req, res) {
