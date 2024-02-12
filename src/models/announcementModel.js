@@ -6,48 +6,34 @@ const announceSchema = mongoose.Schema({
         type: Boolean,
         default: true
     },
-    name : {
-        type: String,
-        // required: true
-    },
     image_url : {
         type: String,
         required: true
     },
-    redirect_url : {
-        type : String,
-        required: true
-    },
+
     file : {
         name : {
             type: String,
-            // required: true
+            required: true
         },
         type : {
             type: String,
-            // required: true,
+            required: true,
         },
         size : {
             type: Number,
-            // required: true,
+            required: true,
         }
     },
     created_by:{
         name: {
             type: String,
         },
-        // email: {
-        //     type: String,
-        // }
+        email: {
+            type: String,
+        }
     },
-    // updated_by:{
-    //     name: {
-    //         type: String,
-    //     },
-    //     email: {
-    //         type: String,
-    //     }
-    // },
+    
 });
 
 const announcementModel = mongoose.model('announcements', announceSchema)
