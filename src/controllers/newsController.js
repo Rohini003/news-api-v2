@@ -43,10 +43,8 @@ async function Delete(req, res) {
 async function update(req, res) {
     const newsId = req.params.newsId;
     const { heading, author, newsContent } = req.body;
-    // Create an object to store the fields to be updated
     const updateFields = {};
 
-    // Check which fields are provided in the request body and add them to the updateFields object
     if (heading) {
         updateFields.heading = heading;
     }
@@ -59,7 +57,6 @@ async function update(req, res) {
 
     try {
         const result = await updateNews(newsId, updateFields);
-
         res.status(200).json(result);
 
     } catch (error) {

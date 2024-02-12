@@ -1,5 +1,5 @@
 const announcements = require('../models/announcementModel.js');
-const {uploadNewAnnouncement,getActiveAnnouncement} = require('../repositorie/announceRepo.js');
+const {uploadNewAnnouncement,getActiveAnnouncement,deleteAnnouncementById,updateAnnouncementById} = require('../repositorie/announceRepo.js');
 const fs = require('fs');
 
 const uploadAnnouncement = async (fileDetails,username,email) => {
@@ -53,4 +53,39 @@ async function getAllAnnouncement() {
     }
 }
 
-module.exports = {uploadAnnouncement,getAllAnnouncement};
+async function deleteAnnouncement(announcementId) {
+    try {
+        const deletedAnnouncement = await deleteAnnouncementById(announcementId);
+
+        if (!deletedAnnouncement) {
+            throw { status: 404, msg: "announcement not found" };
+        }
+
+        return { status: 200, msg: "Deleted Successfully" };
+
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function updateAnnouncement(announcementId, updateFields) {
+    try {
+        // Check if there are any fields to update
+        if (Object.keys(updateFields).length === 0) {
+            throw new Error("No fields to update");
+        }
+        const updatedNews = await updateAnnouncementById(announcementId, updateFields);
+
+        if (!updatedNews) {
+            throw new Error("announcement not found");
+        }
+
+        return { updatedNews, msg: "Updated Successfully" };
+
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
+
+
+module.exports = {uploadAnnouncement,getAllAnnouncement,deleteAnnouncement,updateAnnouncement};

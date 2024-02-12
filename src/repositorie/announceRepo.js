@@ -26,7 +26,30 @@ async function getActiveAnnouncement() {
         return Promise.reject(err);
     }
 }
-module.exports = {uploadNewAnnouncement,getActiveAnnouncement};
+
+async function deleteAnnouncementById(announcementId) {
+    try {
+      return await announcementModel.findOneAndDelete({ _id: announcementId });
+    } catch (error) {
+      throw error; 
+    }
+  }
+
+  async function updateAnnouncementById(announcementId, updateFields) {
+    try {
+        const updatedNews = await announcementModel.findByIdAndUpdate(
+            announcementId,
+            { $set: updateFields },
+            { new: true }
+        );
+
+        return updatedNews;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
+
+module.exports = {uploadNewAnnouncement,getActiveAnnouncement,deleteAnnouncementById,updateAnnouncementById};
 
 
 
