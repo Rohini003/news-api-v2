@@ -1,5 +1,5 @@
 const announcements = require('../models/announcementModel.js');
-const uploadNewAnnouncement = require('../repositorie/announceRepo.js');
+const {uploadNewAnnouncement,getActiveAnnouncement} = require('../repositorie/announceRepo.js');
 const fs = require('fs');
 
 const uploadAnnouncement = async (fileDetails,username,email) => {
@@ -33,4 +33,24 @@ const uploadAnnouncement = async (fileDetails,username,email) => {
     }
 };
 
-module.exports = uploadAnnouncement;
+async function getAllAnnouncement() {
+    try {
+        const response = { message: "No Announcement Found", total_announcement: 0, announcement: [] }
+        const announcementResponse = await getActiveAnnouncement();
+
+        console.log(announcementResponse)
+
+        if (announcementResponse.is_success == true) {
+            response.message = 'Announcement Found';
+            response.total_announcement = announcementResponse?.records?.length
+            response.announcement = announcementResponse?.records
+        }
+        return Promise.resolve(announcementResponse);
+
+    } catch (error) {
+        console.log("error",error)
+        return Promise.reject(error)
+    }
+}
+
+module.exports = {uploadAnnouncement,getAllAnnouncement};

@@ -1,4 +1,4 @@
-const uploadAnnouncement = require("../service/announceService");
+const {uploadAnnouncement,getAllAnnouncement} = require("../service/announceService");
 
 const create = async (req, res, next) => {
     try {
@@ -17,7 +17,19 @@ const create = async (req, res, next) => {
     }
 };
 
-module.exports = create;
+async function fetchAll(req, res) {
+    try {
+        console.log("announcement")
+        const announcement = await getAllAnnouncement();
+        res.status(200).json({ announcement });
+
+    } catch (error) {
+        console.log("error", error)
+        res.status(500).json(error);
+    }
+}
+
+module.exports = {create,fetchAll};
 
 
 
