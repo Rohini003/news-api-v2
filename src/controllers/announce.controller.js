@@ -30,7 +30,7 @@ async function fetchAll(req, res) {
 }
 
 async function Delete(req, res) {
-    const announcementId = req?.params?.announcementId;
+    const announcementId = req?.params?.id;
 
     try {
         const result = await deleteAnnouncement(announcementId);

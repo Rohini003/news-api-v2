@@ -8,8 +8,6 @@ const newsRoutes = require("../src/routes/newsRoutes");
 const announceRouter = require("../src/routes/announceRoutes");
 require("dotenv").config();
 
-
-// 
 app.use(bodyParser.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
