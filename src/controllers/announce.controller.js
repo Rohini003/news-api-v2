@@ -42,28 +42,21 @@ async function Delete(req, res) {
     }
 }
 
-async function update(req, res) {
-    const announcementId = req.params.announcementId;
-    const { heading, author, newsContent } = req.body;
-    const updateFields = {};
-
-    // if (heading) {
-    //     updateFields.heading = heading;
-    // }
-    // if (author) {
-    //     updateFields.author = author;
-    // }
-    // if (newsContent) {
-    //     updateFields.newsContent = newsContent;
-    // }
-
+const update = async (req, res) => {
     try {
-        const result = await updateAnnouncement(announcementId, updateFields);
-        res.status(200).json(result);
+        
+            const updateResult = await updateAnnouncement(req.params.id, req.body);
 
-    } catch (error) {
-        const msg = error.message;
-        res.status(500).json({ msg });
+            if (updateResult) {
+                res.status(200).json({
+                    statusCode: 1,
+                    message: 'Success',
+                    data: updateResult
+                });
+            }
+        }
+    catch (err) {
+        res.status(500).json({error:err.message});
     }
 }
 

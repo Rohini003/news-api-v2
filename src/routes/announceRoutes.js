@@ -6,7 +6,7 @@ const upload = require("../modules/multer")
 
 router.get("/",fetchAll);
 router.post("/post",upload,create);
-router.delete("/delete/:announcementId",Delete);
-router.patch("/update/:newsId",update);
+router.delete("/delete/:id",Delete);
+router.patch("/update/:id",update);
 
 module.exports = router;

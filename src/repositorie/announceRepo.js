@@ -35,15 +35,10 @@ async function deleteAnnouncementById(announcementId) {
     }
   }
 
-  async function updateAnnouncementById(announcementId, updateFields) {
+  async function updateAnnouncementById(announcementId, data) {
     try {
-        const updatedNews = await announcementModel.findByIdAndUpdate(
-            announcementId,
-            { $set: updateFields },
-            { new: true }
-        );
-
-        return updatedNews;
+        return await announcementModel.findByIdAndUpdate(announcementId,data);
+ 
     } catch (error) {
         throw new Error(error.message);
     }

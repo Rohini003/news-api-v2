@@ -68,24 +68,15 @@ async function deleteAnnouncement(announcementId) {
     }
 }
 
-async function updateAnnouncement(announcementId, updateFields) {
+const updateAnnouncement = async (announcementId, data) => {
     try {
-        // Check if there are any fields to update
-        if (Object.keys(updateFields).length === 0) {
-            throw new Error("No fields to update");
-        }
-        const updatedNews = await updateAnnouncementById(announcementId, updateFields);
-
-        if (!updatedNews) {
-            throw new Error("announcement not found");
-        }
-
-        return { updatedNews, msg: "Updated Successfully" };
-
-    } catch (error) {
-        throw new Error(error.message);
+        const updateResult = await updateAnnouncementById(announcementId,data );
+        return updateResult;
+    } catch (err) {
+        throw err;
     }
 }
+
 
 
 module.exports = {uploadAnnouncement,getAllAnnouncement,deleteAnnouncement,updateAnnouncement};
