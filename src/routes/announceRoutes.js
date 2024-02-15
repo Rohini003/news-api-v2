@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const AnnounceController = require("../controllers/announce.controller");
+const AnnounceController = require("../controllers/announceCcontroller");
 const upload = require("../modules/multer");
 
 const announceController = new AnnounceController();
