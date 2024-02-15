@@ -1,51 +1,46 @@
-const announcementModel = require("../models/announcementModel");
+const AnnouncementModel = require("../models/announcementModel");
 
-const uploadNewAnnouncement = async (announcementRecord) => {
-    try {
-        return await announcementModel.create(announcementRecord); 
-    } catch (error) {
-        throw new Error("Error saving announcement: " + error.message);
-    }
-};
-
-async function getActiveAnnouncement() {
-    try {
-        const response = { is_success: false, records: [] };
-        const queryResponse = await announcementModel.find({}).lean();
-        //Using lean() can improve query performance.//
-
-        if (queryResponse.length > 0) {
-            response.is_success = true;
-            response.records = queryResponse;
+class AnnounceRepo {
+    async uploadNewAnnouncement(announcementRecord) {
+        try {
+            return await AnnouncementModel.create(announcementRecord);
+        } catch (error) {
+            throw new Error("Error saving announcement: " + error.message);
         }
+    }
 
-        return Promise.resolve(response)
+    async getActiveAnnouncement() {
+        try {
+            const response = { is_success: false, records: [] };
+            const queryResponse = await AnnouncementModel.find({}).lean();
 
-    } catch (err) {
-        console.log("err",err)
-        return Promise.reject(err);
+            if (queryResponse.length > 0) {
+                response.is_success = true;
+                response.records = queryResponse;
+            }
+
+            return response;
+        } catch (err) {
+            console.log("err", err);
+            throw err;
+        }
+    }
+
+    async deleteAnnouncementById(announcementId) {
+        try {
+            return await AnnouncementModel.findOneAndDelete({ _id: announcementId });
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async updateAnnouncementById(announcementId, data) {
+        try {
+            return await AnnouncementModel.findByIdAndUpdate(announcementId, data);
+        } catch (error) {
+            throw new Error(error.message);
+        }
     }
 }
 
-async function deleteAnnouncementById(announcementId) {
-    try {
-      return await announcementModel.findOneAndDelete({ _id: announcementId });
-    } catch (error) {
-      throw error; 
-    }
-  }
-
-  async function updateAnnouncementById(announcementId, data) {
-    try {
-        return await announcementModel.findByIdAndUpdate(announcementId,data);
- 
-    } catch (error) {
-        throw new Error(error.message);
-    }
-}
-
-module.exports = {uploadNewAnnouncement,getActiveAnnouncement,deleteAnnouncementById,updateAnnouncementById};
-
-
-
-
+module.exports = AnnounceRepo;
